@@ -1,17 +1,22 @@
 {
   "name": "graphite-udp",
-  "version": "0.1.0",
   "description": "Simple Graphite UDP client for Node.js",
+  "version": "0.1.0",
   "main": "graphite-udp.js",
+  "author": "Fernando MAdS <fermads@gmail.com>",
+  "license": "MIT",
+
   "repository": {
     "type": "git",
-    "url": "https://github.com/fermads/Graphite-UDP.git"
+    "url": "git://github.com/fermads/Graphite-UDP.git"
   },
+
   "keywords": [
     "graphite",
-    "node.js",
     "udp"
   ],
-  "author": "Fernando MAdS <fermads@gmail.com>",
-  "license": "MIT"
+
+  "engines": {
+    "node": ">=0.8.0"
+  }
 }
