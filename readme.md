@@ -20,7 +20,7 @@ graphiteUdp.addMetric(metric, value, [callback])
 ```
 
 `options` is an object with the following defaults:
-```json
+```
 {
 	host: '127.0.0.1',
 	port: 2003,
