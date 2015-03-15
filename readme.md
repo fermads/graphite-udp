@@ -1,6 +1,6 @@
 # Graphite UDP
 
-Simple Graphite UDP client for Node.js
+Graphite UDP client for Node.js
 
 * UDP for max performance
 * Uses the plaintext Graphite protocol
@@ -24,21 +24,21 @@ graphiteUdp.addMetric(metric, value, [callback])
 {
 	host: '127.0.0.1',
 	port: 2003,
-	debug: false,
-	interval: 5000, // group metrics for this amount of time and send 1 request
+	verbose: false,
+	interval: 5000, // group metrics for this 5s and send 1 request
 	type: 'udp4'
 }
 ```
 
 ## Example
 ```js
-graphiteUdp = require('./graphite-udp').createClient({debug:true});
+graphiteUdp = require('./graphite-udp').createClient({verbose:true});
 for (var i = 0; i < 100; i++) {
 	graphiteUdp.addMetric('my.test.metric', parseInt(Math.random()*100, 10));
 }
 ```
 
-Make sure your Carbon is listening for UDP connections on carbon.conf 
+Make sure your Carbon is listening for UDP connections on carbon.conf
 
 `ENABLE_UDP_LISTENER = True # default for version 0.9.10 of Graphite is False`
 
