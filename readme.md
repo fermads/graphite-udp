@@ -25,7 +25,7 @@ graphiteUdp.addMetric(metric, value, [callback])
 	host: '127.0.0.1',
 	port: 2003,
 	verbose: false,
-	interval: 5000, // group metrics for this 5s and send 1 request
+	interval: 5000, // group metrics for 5s and send only 1 request
 	type: 'udp4'
 }
 ```
