@@ -1,7 +1,7 @@
 {
   "name": "graphite-udp",
   "description": "Graphite UDP client for Node.js",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "main": "graphite-udp.js",
   "author": "Fernando MAdS <fermads@gmail.com>",
   "repository": {
