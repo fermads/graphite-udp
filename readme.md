@@ -25,13 +25,13 @@ metric.put(name, value)
 ```js
 {
   host: '127.0.0.1', // graphite server host or ip
-  port: 2003, // graphite server udp port (this is the default)
+  port: 2003, // graphite server udp port
   type: 'udp4', // udp type (udp4 or udp6)
   prefix: '', // a prefix to prepend to the name of all metrics
   suffix: '', // a suffix to append to the name of all metrics
   verbose: false, // log messages to console
   interval: 5000, // group metrics for 5s and send only 1 request
-  callback: null // callback(error, metricsSent) called when metrics are sent to server
+  callback: null // callback(error, metrics) called when metrics are sent
 }
 ```
 
