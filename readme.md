@@ -36,10 +36,13 @@ metric.put(name, value)
 }
 ```
 
-Make sure your Carbon is listening for UDP connections on carbon.conf
+Note that UDP is connection-less protocol. Many errors (connection errors)
+won't emit or throw (except DNS lookups) so make sure your host, port and type
+are correct.
+
+Also make sure your Carbon is listening for UDP connections on carbon.conf
 
 `ENABLE_UDP_LISTENER = True # default for version 0.9.10 of Graphite is False`
-
 
 ## Example
 ```js
@@ -74,8 +77,8 @@ myproductname.my.test.metric2.NI-67936-0 5 1447193969
 During the `interval` time option, if 2 or more metrics with the same name
 are sent, metrics will be added (summed)
 ```js
-metrics.add('my.test.metric', 20)
-metrics.add('my.test.metric', 10)
+metric.add('my.test.metric', 20)
+metric.add('my.test.metric', 10)
 ```
 What will actually be sent to the server after `interval` is
 ```
@@ -86,14 +89,19 @@ my.test.metric 30
 During the `interval` time option, if 2 or more metrics with the same name
 are sent, the last one will be used
 ```js
-metrics.put('my.test.metric', 20)
-metrics.put('my.test.metric', 10)
+metric.put('my.test.metric', 20)
+metric.put('my.test.metric', 10)
 ```
 What will actually be sent to the server after `interval` is
 ```
 my.test.metric 10
 ```
 
+### metric.close
+Close the underlying UDP socket
+```js
+metric.close()
+```
 
 ## License
 
