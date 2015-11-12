@@ -87,7 +87,6 @@ function Client(options) {
     log('Sending '+ Object.keys(queue).length +' metrics to '
       + options.host +':'+ options.port)
 
-    console.log(options.hos)t;
     socket.send(metrics, 0, metrics.length, options.port, options.host,
       function(err) {
         console.log(err);
