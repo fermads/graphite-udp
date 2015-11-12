@@ -3,7 +3,7 @@ var util = require('util')
 
 function Client(options) {
 
-  var queue = {}, socket
+  var queue = {}, client, id
 
   var defaults = {
     host: '127.0.0.1',
@@ -19,29 +19,35 @@ function Client(options) {
   function init() {
     options = util._extend(defaults, options)
 
-    connect()
+    createClient()
 
-    setInterval(send, options.interval)
+    id = setInterval(send, options.interval)
 
     return {
       add: add,
       put: put,
+      close: close,
       options: options
     }
   }
 
-  function connect() {
-    socket = dgram.createSocket(options.type)
+  function createClient() {
+    client = dgram.createSocket(options.type)
 
-    socket.on('close', function() {
+    client.on('close', function() {
       log('UDP socket closed')
     })
 
-    socket.on('error', function(err) {
+    client.on('error', function(err) {
       log('UDP socket error: '+ err)
     })
 
     log('Creating new Graphite UDP client')
+  }
+
+  function close() {
+    client.close()
+    clearInterval(id)
   }
 
   function put(name, value) {
@@ -49,7 +55,7 @@ function Client(options) {
   }
 
   function add(name, value, replace) {
-    if(!name || isNaN(value))
+    if(!name || isNaN(parseFloat(value)) || value === Infinity)
       return log('Skipping invalid name/value: '+ name +' '+ value)
 
     if(options.prefix)
@@ -87,16 +93,15 @@ function Client(options) {
     log('Sending '+ Object.keys(queue).length +' metrics to '
       + options.host +':'+ options.port)
 
-    socket.send(metrics, 0, metrics.length, options.port, options.host,
+    client.send(metrics, 0, metrics.length, options.port, options.host,
       function(err) {
-        console.log(err);
       if(err)
         return log('Error sending metrics: '+ err)
 
+      log('Metrics sent:'+ metrics.toString().replace(/^|\n/g, '\n\t'))
+
       if(options.callback)
         options.callback(err, metrics.toString())
-
-      log('Metrics sent:\n'+ metrics.toString())
     })
 
     queue = {}
