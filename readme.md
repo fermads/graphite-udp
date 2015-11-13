@@ -52,8 +52,8 @@ var metric = graphite.createClient({
   suffix: os.hostname(),
   interval: 60000,
   verbose: true,
-  callback: function(error, metricsSent) {
-    console.log('Metrics sent\n'+ metricsSent)
+  callback: function(error, metrics) {
+    console.log('Metrics sent\n'+ metrics)
   }
 })
 
@@ -63,7 +63,7 @@ metric.put('my.test.metric2', 1) // put 1
 metric.put('my.test.metric2', 5) // put 5 (overwrite 1 with 5)
 ```
 
-Will generate
+After 1m (`interval`) will generate:
 
 ```
 productname.my.test.metric1.machinename 30 1447193969
