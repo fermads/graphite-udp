@@ -9,6 +9,7 @@ function Client(options) {
     host: '127.0.0.1',
     port: 2003,
     type: 'udp4',
+    maxPacketSize: 4096,
     prefix: '',
     suffix: '',
     verbose: false,
@@ -74,24 +75,8 @@ function Client(options) {
     log('Adding metric to queue: '+ name +' '+ value)
   }
 
-  function getQueue() {
-    var text = ''
-
-    for(var name in queue) {
-      text += name +' '+ queue[name].value +' '+ queue[name].timestamp +'\n'
-    }
-
-    return text
-  }
-
-  function send() {
-    if(Object.keys(queue).length === 0)
-      return //log('Queue is empty. Nothing to send')
-
-    var metrics = new Buffer(getQueue())
-
-    log('Sending '+ Object.keys(queue).length +' metrics to '
-      + options.host +':'+ options.port)
+  function sendPacket(metrics, count) {
+    log('Sending '+ count +' metrics to '+ options.host +':'+ options.port)
 
     client.send(metrics, 0, metrics.length, options.port, options.host,
       function(err) {
@@ -103,6 +88,30 @@ function Client(options) {
       if(options.callback)
         options.callback(err, metrics.toString())
     })
+  }
+
+  function send() {
+    if(Object.keys(queue).length === 0)
+      return //log('Queue is empty. Nothing to send')
+
+    var buffer = '', count = 0, line
+
+    for(var name in queue) {
+      line = name +' '+ queue[name].value +' '+ queue[name].timestamp +'\n'
+
+      if(line.length + buffer.length > options.maxPacketSize && buffer.length > 0) {
+        sendPacket(new Buffer(buffer), count)
+        buffer = line
+        count = 1
+      } else {
+        buffer += line
+        count += 1
+      }
+    }
+
+    if(buffer.length > 0) {
+      sendPacket(new Buffer(buffer), count)
+    }
 
     queue = {}
   }
