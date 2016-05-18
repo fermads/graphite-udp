@@ -73,18 +73,20 @@ function Client (options) {
     log('Adding metric to queue: '+ name +' '+ value)
   }
 
-  function sendPacket (metrics, count) {
+  function sendPacket (metrics, count, last) {
     log('Sending '+ count +' metrics to '+ options.host +':'+ options.port)
 
-    client.send(metrics, 0, metrics.length, options.port,
+    var buffer = new Buffer(metrics)
+
+    client.send(buffer, 0, buffer.length, options.port,
     options.host, function (err) {
       if (err)
         return log('Error sending metrics: '+ err)
 
-      log('Metrics sent:'+ metrics.toString().replace(/^|\n/g, '\n\t'))
+      log('Last sent metrics:'+ metrics.replace(/^|\n/g, '\n\t'))
 
-      if (options.callback)
-        options.callback(err, metrics.toString())
+      if (options.callback && last)
+        options.callback(err, metrics)
     })
   }
 
@@ -92,26 +94,23 @@ function Client (options) {
     if (Object.keys(queue).length === 0)
       return // log('Queue is empty. Nothing to send')
 
-    var buffer = '', count = 0, line
+    var metrics = '', count = 0, line
 
     for (var name in queue) {
       line = name +' '+ queue[name].value +' '+ queue[name].timestamp +'\n'
 
-      if (line.length + buffer.length > options.maxPacketSize
-      && buffer.length > 0) {
-        sendPacket(new Buffer(buffer), count)
-        buffer = line
-        count = 1
+      if (count > 0 && line.length + metrics.length > options.maxPacketSize) {
+        sendPacket(metrics, count)
+        metrics = line
       }
       else {
-        buffer += line
-        count += 1
+        metrics += line
       }
+
+      count++
     }
 
-    if (buffer.length > 0)
-      sendPacket(new Buffer(buffer), count)
-
+    sendPacket(metrics, count, true)
     queue = {}
   }
 
