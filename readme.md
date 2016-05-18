@@ -27,6 +27,7 @@ metric.put(name, value)
   host: '127.0.0.1', // graphite server host or ip
   port: 2003, // graphite server udp port
   type: 'udp4', // udp type (udp4 or udp6)
+  maxPacketSize: 4096, // split metrics into smaller packets to not reach UPD packet size limit
   prefix: '', // a prefix to prepend to the name of all metrics
   suffix: '', // a suffix to append to the name of all metrics
   verbose: false, // log messages to console
@@ -35,13 +36,19 @@ metric.put(name, value)
 }
 ```
 
-Note that UDP is connection-less protocol. Many errors (connection errors)
+Note 1: UDP is connection-less protocol. Many errors (connection errors)
 won't emit or throw (except DNS lookups) so make sure your `host`, `port` and
 `type` are correct.
 
-Also make sure your Carbon is listening for UDP connections on carbon.conf
+Note 2: Make sure your Carbon is listening for UDP connections on carbon.conf
 
 `ENABLE_UDP_LISTENER = True # default for version 0.9.10 of Graphite is False`
+
+Note 3: If you are getting packets dropped tweak with
+maxPacketSize option and read
+[this](https://github.com/nodejs/node-v0.x-archive/issues/1623) and "A Note about UDP datagram size" at
+[Node.js dgram module doc](https://nodejs.org/api/dgram.html)
+
 
 ## Example
 ```js
