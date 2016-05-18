@@ -1,23 +1,15 @@
 {
   "parserOptions": {
-    "ecmaVersion": 6,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
-    },
+    "ecmaVersion": 5,
     "sourceType": "module"
   },
 
   "env": {
-    "es6": true,
+    "es6": false,
     "node": true
   },
 
   "globals": {
-    "document": false,
-    "navigator": false,
-    "window": false,
-    "log": true
   },
 
   "rules": {
