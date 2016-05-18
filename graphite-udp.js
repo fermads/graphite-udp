@@ -1,5 +1,4 @@
 var dgram = require('dgram')
-var util = require('util')
 
 function Client (options) {
   var queue = {}, client, id
@@ -17,7 +16,7 @@ function Client (options) {
   }
 
   function init () {
-    options = util._extend(defaults, options)
+    options = extend(defaults, options)
 
     createClient()
 
@@ -119,6 +118,12 @@ function Client (options) {
   function log (line) {
     if (options.verbose)
       console.log('[graphite-udp]', line)
+  }
+
+  function extend (origin, add) {
+    for (var key in add)
+      origin[key] = add[key]
+    return origin
   }
 
   return init()
