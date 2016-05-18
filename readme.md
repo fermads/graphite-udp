@@ -45,8 +45,8 @@ __Note 2__: Make sure your Carbon is listening for UDP connections on carbon.con
 `ENABLE_UDP_LISTENER = True # default for version 0.9.10 of Graphite is False`
 
 __Note 3__: If you are getting packets dropped tweak with
-maxPacketSize option and read
-[this](https://github.com/nodejs/node-v0.x-archive/issues/1623) and "A Note about UDP datagram size" at
+`maxPacketSize` option and read
+[UDP max packet size](https://github.com/nodejs/node-v0.x-archive/issues/1623) and "A Note about UDP datagram size" at
 [Node.js dgram module doc](https://nodejs.org/api/dgram.html)
 
 
