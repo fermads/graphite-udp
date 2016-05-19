@@ -16,6 +16,7 @@ npm install graphite-udp
 ```js
 var graphite = require('graphite-udp')
 var metric = graphite.createClient([options])
+// or var metric = new graphite.Client([options])
 metric.add(name, value)
 metric.put(name, value)
 ```

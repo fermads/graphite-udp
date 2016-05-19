@@ -25,7 +25,7 @@ var options = {
 }
 
 function run () {
-  metric = graphite.createClient(options)
+  metric = new graphite.Client(options)
 
   console.log('[tests] Starting tests...')
 

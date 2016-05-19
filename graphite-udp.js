@@ -129,6 +129,7 @@ function Client (options) {
 }
 
 module.exports = {
+  Client: Client,
   createClient: function (options) {
     return new Client(options)
   }
